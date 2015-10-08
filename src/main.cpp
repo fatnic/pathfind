@@ -76,6 +76,9 @@ int main()
         if(goalSet)
             window.draw(goal);
 
+        for(Point* point : waypoints)
+            DrawTools::drawCircle(4, *point, sf::Color::Green, &window);        
+
         window.display();
     }
 
