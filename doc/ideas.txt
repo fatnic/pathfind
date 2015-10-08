@@ -1,0 +1,6 @@
+create test grid of 16x16 tiles (cells)
+ceate walls (IntRect) in grid intervals
+
+when pathfinding blocked path means center of cell (x,y) is within the wall intrect
+while doing line of sight rayline intersects with wall segment
+
