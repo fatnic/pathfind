@@ -43,15 +43,18 @@ private:
     Point _start;
     Point _goal;
     sf::RenderWindow* _window;
+    std::vector<std::vector<bool>> pathgrid;
     std::vector<Point*> _waypoints;
     std::vector<Wall*>* _walls;
     std::vector<PathNode*> _openlist;
     std::vector<PathNode*> _closedlist;
     bool neighbours[9];
 
+    void buildPathGrid();
     bool inVector(std::vector<PathNode*> list, Point cell);
     void calcNeighbours(int x, int y);
     bool blocked(Point cell);
+    static bool sortNodes(PathNode* n0, PathNode* n1);
 
 public:
     Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window); 

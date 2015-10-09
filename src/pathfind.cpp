@@ -21,6 +21,35 @@ Pathfind::Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWind
     _tileSizeY = ml->GetTileSize().y;
     _tilesX = ml->GetMapSize().x / _tileSizeX;
     _tilesY = ml->GetMapSize().y / _tileSizeY;
+
+    buildPathGrid();
+}
+
+void Pathfind::buildPathGrid()
+{
+    pathgrid.clear();
+    int y = 0;
+    while(y < _tilesY)
+    {
+        std::vector<bool> xrow;
+        for(int x = 1; x < (_tilesX + 1); x++)
+        {
+            bool blocked = false;
+            Point grid(((x + 1) * _tileSizeX) - (_tilesX / 2), ((y + 1) * _tileSizeY) - (_tilesY / 2));
+            for(Wall* wall : *_walls)
+            {
+                if(wall->AABB.contains(grid.x, grid.y))
+                {
+                    blocked = true;
+                    break;
+                }
+            }
+            xrow.push_back(blocked);
+        }
+        pathgrid.push_back(xrow);
+        y++;
+    }
+
 }
 
 void Pathfind::setStart(const int x, const int y)
@@ -47,20 +76,17 @@ std::vector<Point*> Pathfind::run()
 
     while(!_openlist.empty())
     {
-        std::sort(_openlist.begin(), _openlist.end());
+        std::sort(_openlist.begin(), _openlist.end(), sortNodes);
         current = _openlist[0];
 
         if(current->cell == _goal)
         {
-            std::cout << "found goal\n";
             while(current->parent != nullptr)
             {
                 _waypoints.push_back(new Point((current->cell.x * _tileSizeX) - 8, (current->cell.y * _tileSizeY) - 8));
                 current = current->parent;
             }
             
-            std::cout << _waypoints.size() << " waypoints...\n";
-
             for(auto& node : _openlist)
                 delete node;
             _openlist.clear();
@@ -119,6 +145,11 @@ std::vector<Point*> Pathfind::run()
     return _waypoints;
 }
 
+bool Pathfind::sortNodes(PathNode* n0, PathNode* n1)
+{
+    return (n0->F < n1->F);
+}
+
 float Pathfind::distance(Point p1, Point p2)
 {
     float dx = p1.x - p2.x;
@@ -153,14 +184,12 @@ void Pathfind::calcNeighbours(int x, int y)
     for(int i = 0; i < 9; i++)
     {
         int xi = (i % 3) - 1;
-        int yi = (i % 3) - 1;
+        int yi = (i / 3) - 1;
 
         Point neighbour(x + xi, y + yi);
 
-        /* drawCircle(2, Point((x+xi) * 16 - 8, (y+yi) * 16 - 8), sf::Color::Red, _window); */
-        /* _window->display(); */
-
-        if(blocked(neighbour)) neighbours[i] = false;
+        if(blocked(neighbour))
+            neighbours[i] = false;
     }
 
     if(neighbours[1] == false)
@@ -190,13 +219,8 @@ void Pathfind::calcNeighbours(int x, int y)
 
 bool Pathfind::blocked(Point cell)
 {
-    if(cell.x < 1 || cell.x > _tilesX || cell.y < 1 || cell.y > _tilesY)
+    if(cell.x < 1 || cell.x > _tilesX || cell.y < 1 || cell.y > _tilesY) 
         return true;
 
-    for(Wall* wall : *_walls)
-    {
-        if(wall->AABB.contains(cell.x * _tileSizeX - (_tileSizeX/2), cell.y * _tileSizeY - (_tileSizeY/2)))
-            return true;
-    }
-    return false;
+    return pathgrid[cell.y-1][cell.x-1];
 }
