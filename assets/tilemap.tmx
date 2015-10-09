@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" nextobjectid="8">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" nextobjectid="25">
  <tileset firstgid="1" name="tilemap" tilewidth="16" tileheight="16" tilecount="4">
   <image source="tilemap.png" width="32" height="32"/>
  </tileset>
  <layer name="floor" width="40" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt0zEKACAMQ9GCvf+Z3cXFEmzQP2TpEF4pzYjIJWMzcwo+fPjw4dN0qPfF5+er5oZPHXefaseTm7kEX7/v59/D19+Nr78DH74XfBOIQxJ6
+   eJzt1bEKACAIRVHB/v+b28OleJrgHd7SoCcNWma2jnhwdhsX11P7MjNhfvjw4cutwfzwqXyvqfCpa3T3qd7Izc6qfYqe+HJ8Xf4mfPjw9fIp7jJ5flN8PxL13j+YEjw=
   </data>
  </layer>
  <objectgroup name="walls">
   <object id="1" x="80" y="0" width="16" height="240"/>
   <object id="2" x="80" y="304" width="16" height="176"/>
-  <object id="3" x="352" y="144" width="16" height="112"/>
-  <object id="4" x="448" y="240" width="16" height="240"/>
+  <object id="3" x="352" y="32" width="16" height="224"/>
+  <object id="4" x="448" y="240" width="16" height="160"/>
   <object id="5" x="400" y="144" width="16" height="64"/>
   <object id="6" x="416" y="192" width="224" height="16"/>
   <object id="7" x="368" y="240" width="80" height="16"/>
+  <object id="10" x="96" y="464" width="464" height="16"/>
+  <object id="11" x="448" y="416" width="16" height="48"/>
+  <object id="12" x="352" y="0" width="16" height="16"/>
+  <object id="13" x="400" y="0" width="16" height="16"/>
+  <object id="14" x="400" y="32" width="16" height="96"/>
+  <object id="23" x="624" y="208" width="16" height="272"/>
+  <object id="24" x="576" y="464" width="48" height="16"/>
  </objectgroup>
 </map>

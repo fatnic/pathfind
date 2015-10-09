@@ -82,6 +82,7 @@ int main()
 
         window.clear();
         window.draw(ml);
+        pathfind.buildPathGrid();
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {

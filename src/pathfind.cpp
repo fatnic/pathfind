@@ -49,7 +49,6 @@ void Pathfind::buildPathGrid()
         pathgrid.push_back(xrow);
         y++;
     }
-
 }
 
 void Pathfind::setStart(const int x, const int y)
@@ -133,7 +132,7 @@ std::vector<Point*> Pathfind::run()
                     {
                         node->G = G;
                         node->H = H;
-                        node->recalcF();
+                        /* node->recalcF(); */
                         node->parent = current;
                     }
                 }

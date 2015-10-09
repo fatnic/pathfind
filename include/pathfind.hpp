@@ -50,7 +50,6 @@ private:
     std::vector<PathNode*> _closedlist;
     bool neighbours[9];
 
-    void buildPathGrid();
     bool inVector(std::vector<PathNode*> list, Point cell);
     void calcNeighbours(int x, int y);
     bool blocked(Point cell);
@@ -60,6 +59,7 @@ public:
     Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window); 
     void setStart(const int x, const int y);
     void setGoal(const int x, const int y);
+    void buildPathGrid();
 
     static float distance(Point p1, Point p2);
 	static float manhattenDistance(Point p1, Point p2);
