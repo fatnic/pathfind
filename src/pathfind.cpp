@@ -65,10 +65,12 @@ void Pathfind::setGoal(const int x, const int y)
 
 std::vector<Point*> Pathfind::run()
 {
-
     for(auto& node : _waypoints)
         delete node;
     _waypoints.clear();
+
+    if(pathgrid[_goal.y - 1][_goal.x - 1])
+        return _waypoints;
 
     PathNode* current = new PathNode(_start, nullptr, 0.f, distance(_start, _goal));
     _openlist.push_back(current);
