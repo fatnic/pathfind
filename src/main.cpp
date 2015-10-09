@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "tools.hpp"
+#include <iostream>
 #include "structs.hpp"
 #include "pathfind.hpp"
 #include "tmx/MapLoader.h"
@@ -16,6 +16,29 @@ void getWallsFromTmx(tmx::MapLoader* ml, std::vector<Wall*>& walls)
                 walls.push_back(new Wall(object.GetAABB().left, object.GetAABB().top, object.GetAABB().width, object.GetAABB().height));
             }
         }
+    }
+}
+
+
+namespace DrawTools
+{
+    void drawCircle(float radius, Point position, sf::Color color, sf::RenderTarget* window)
+    {
+        sf::CircleShape circle(radius);
+        circle.setOrigin(circle.getRadius(), circle.getRadius());
+        circle.setPosition(position.x, position.y);
+        circle.setFillColor(color);
+        window->draw(circle);
+    }
+
+    void drawLine(Point start, Point end, sf::Color color, sf::RenderTarget* window)
+    {
+        sf::Vertex line[2];
+        line[0].position = sf::Vector2f(start.x, start.y);
+        line[1].position = sf::Vector2f(end.x, end.y);
+        line[0].color = color;
+        line[1].color = color;
+        window->draw(line, 2, sf::Lines);
     }
 }
 
@@ -37,7 +60,7 @@ int main()
 
     sf::CircleShape npc(8);
     npc.setOrigin(npc.getRadius(), npc.getRadius());
-    npc.setPosition(3*16, 3*16);
+    npc.setPosition(3*16-8, 3*16-8);
     npc.setFillColor(sf::Color::Blue);
 
     bool goalSet = false;
@@ -45,9 +68,9 @@ int main()
     goal.setOrigin(goal.getRadius(), goal.getRadius());
     goal.setFillColor(sf::Color::Red);
 
-    Pathfind pathfind(ml.GetTileSize().x, ml.GetTileSize().y, &window);
+    Pathfind pathfind(&ml, &walls, &window);
     std::vector<Point*> waypoints;
-
+    
     while(window.isOpen())
     {
         sf::Event event;
@@ -56,6 +79,9 @@ int main()
             if(event.type == sf::Event::Closed)
                 window.close();
         }
+
+        window.clear();
+        window.draw(ml);
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
@@ -66,18 +92,22 @@ int main()
 
             pathfind.setStart(npc.getPosition().x, npc.getPosition().y);
             pathfind.setGoal(x, y);
+            waypoints.clear();
             waypoints = pathfind.run();
         }
 
-        window.clear();
-        window.draw(ml);
         window.draw(npc);
+
+        /* for(Wall* wall : walls) */
+        /*     wall->draw(&window); */
 
         if(goalSet)
             window.draw(goal);
 
         for(Point* point : waypoints)
-            DrawTools::drawCircle(4, *point, sf::Color::Green, &window);        
+        {
+            DrawTools::drawCircle(4, *point, sf::Color::Green, &window);
+        }
 
         window.display();
     }

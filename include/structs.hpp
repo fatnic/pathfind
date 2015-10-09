@@ -1,9 +1,8 @@
-#ifndef STRUCTS_HPP
-#define STRUCTS_HPP
+#pragma once
 
 #include <SFML/Graphics.hpp> 
 
-typedef sf::Vector2<double> Point;
+typedef sf::Vector2<float> Point;
 
 struct Ray
 {
@@ -33,4 +32,3 @@ struct Wall
     }
 };
 
-#endif
