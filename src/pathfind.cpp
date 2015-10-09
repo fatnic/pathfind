@@ -13,6 +13,37 @@ void drawCircle(float radius, Point position, sf::Color color, sf::RenderTarget*
     window->draw(circle);
 }
 
+double perpDot(const Point& a, const Point& b) { return (a.y * b.x) - (a.x * b.y); }
+
+bool getIntersection(Ray ray, Segment* segment, Point& intersect)
+{
+    Point a(ray.end - ray.start);
+    Point b(segment->p2 - segment->p1);
+
+    double f = perpDot(a, b);
+    if(!f)
+        return false;
+
+    Point c(segment->p2 - ray.end);
+    double aa = perpDot(a,c);
+    double bb = perpDot(b,c);
+
+    if(f < 0)
+    {
+        if(aa > 0 || aa < f) return false;
+        if(bb > 0 || bb < f) return false;
+    }
+    else
+    {
+        if(aa < 0 || aa > f) return false;
+        if(bb < 0 || bb > f) return false;
+    }
+
+    double out = 1.0 - (aa / f);
+    intersect = ((segment->p2 - segment->p1) * out) + segment->p1;
+    return true;
+}
+
 Pathfind::Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window)
     : _window(window)
     , _walls(walls)

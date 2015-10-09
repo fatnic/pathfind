@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp> 
 
-typedef sf::Vector2<float> Point;
+typedef sf::Vector2<double> Point;
 
 struct Ray
 {
