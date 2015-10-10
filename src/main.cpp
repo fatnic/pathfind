@@ -4,21 +4,8 @@
 #include "structs.hpp"
 #include "pathfind.hpp"
 #include "drawtools.hpp"
+#include "tmxtools.hpp"
 #include "tmx/MapLoader.h"
-
-void getWallsFromTmx(tmx::MapLoader* ml, std::vector<Wall*>& walls)
-{
-    for(tmx::MapLayer& layer : ml->GetLayers())
-    {
-        if(layer.name == "walls")
-        {
-            for(tmx::MapObject& object : layer.objects)
-            {
-                walls.push_back(new Wall(object.GetAABB().left, object.GetAABB().top, object.GetAABB().width, object.GetAABB().height));
-            }
-        }
-    }
-}
 
 int main()
 {
@@ -29,7 +16,7 @@ int main()
     ml.Load("tilemap.tmx");
 
     std::vector<Wall*> walls;
-    getWallsFromTmx(&ml, walls);
+    TmxTools::getWallsFromTmx(&ml, walls);
 
     int windowWidth  = ml.GetMapSize().x;
     int windowHeight = ml.GetMapSize().y;

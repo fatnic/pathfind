@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" nextobjectid="45">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="41" height="31" tilewidth="16" tileheight="16" nextobjectid="46">
  <tileset firstgid="1" name="tilemap" tilewidth="16" tileheight="16" tilecount="4">
   <image source="tilemap.png" width="32" height="32"/>
  </tileset>
- <layer name="floor" width="40" height="30">
+ <layer name="floor" width="41" height="31">
   <data encoding="base64" compression="zlib">
-   eJztls0OABAMg5fw/s/s6oD4qxU99IIln64W0cxiRaGxN3IGVf8C36p+90984kPy5Sqt7dDK/dASn6T+zvPV3jpijuyeLzfMZ/H51LLwsfvnzdfzh0FnwNM/dj6m/HnkY4aP3T/xneNLJbESOQ==
+   eJztljEOwCAMAyPB/9/clQEQEEJs1cMtFNSTiSyqmdUBZfJtZ0/2eQZHL8pRjnJ879jSW7uBx/EFchRIMNz1ar/1eiCiYyK6iaXDEf7xB0cvyhHHceXtEz0P2TkyOKLNY9asnDgy5ChHPEcUPs/ZE00=
   </data>
  </layer>
  <objectgroup name="walls">
@@ -27,5 +27,6 @@
   <object id="42" x="128" y="352" width="64" height="16"/>
   <object id="43" x="208" y="352" width="48" height="16"/>
   <object id="44" x="0" y="240" width="64" height="16"/>
+  <object id="45" x="528" y="240" width="128" height="16"/>
  </objectgroup>
 </map>
