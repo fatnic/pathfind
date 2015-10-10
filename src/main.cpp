@@ -3,6 +3,7 @@
 #include <iostream>
 #include "structs.hpp"
 #include "pathfind.hpp"
+#include "drawtools.hpp"
 #include "tmx/MapLoader.h"
 
 void getWallsFromTmx(tmx::MapLoader* ml, std::vector<Wall*>& walls)
@@ -16,29 +17,6 @@ void getWallsFromTmx(tmx::MapLoader* ml, std::vector<Wall*>& walls)
                 walls.push_back(new Wall(object.GetAABB().left, object.GetAABB().top, object.GetAABB().width, object.GetAABB().height));
             }
         }
-    }
-}
-
-
-namespace DrawTools
-{
-    void drawCircle(float radius, Point position, sf::Color color, sf::RenderTarget* window)
-    {
-        sf::CircleShape circle(radius);
-        circle.setOrigin(circle.getRadius(), circle.getRadius());
-        circle.setPosition(position.x, position.y);
-        circle.setFillColor(color);
-        window->draw(circle);
-    }
-
-    void drawLine(Point start, Point end, sf::Color color, sf::RenderTarget* window)
-    {
-        sf::Vertex line[2];
-        line[0].position = sf::Vector2f(start.x, start.y);
-        line[1].position = sf::Vector2f(end.x, end.y);
-        line[0].color = color;
-        line[1].color = color;
-        window->draw(line, 2, sf::Lines);
     }
 }
 
@@ -98,9 +76,6 @@ int main()
         }
 
         window.draw(npc);
-
-        /* for(Wall* wall : walls) */
-        /*     wall->draw(&window); */
 
         if(goalSet)
             window.draw(goal);

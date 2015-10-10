@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _PATHFIND_HPP
+#define _PATHFIND_HPP
 
 #include <vector>
 #include "structs.hpp"
@@ -60,10 +61,9 @@ public:
     void setStart(const int x, const int y);
     void setGoal(const int x, const int y);
     void buildPathGrid();
-
-    static float distance(Point p1, Point p2);
-	static float manhattenDistance(Point p1, Point p2);
+    Point c2p(Point cell);
 
     std::vector<Point*> run();
-
 };
+
+#endif

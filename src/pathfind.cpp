@@ -3,46 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <stdlib.h>
-
-void drawCircle(float radius, Point position, sf::Color color, sf::RenderTarget* window)
-{
-    sf::CircleShape circle(radius);
-    circle.setOrigin(circle.getRadius(), circle.getRadius());
-    circle.setPosition(position.x, position.y);
-    circle.setFillColor(color);
-    window->draw(circle);
-}
-
-double perpDot(const Point& a, const Point& b) { return (a.y * b.x) - (a.x * b.y); }
-
-bool getIntersection(Ray ray, Segment* segment, Point& intersect)
-{
-    Point a(ray.end - ray.start);
-    Point b(segment->p2 - segment->p1);
-
-    double f = perpDot(a, b);
-    if(!f)
-        return false;
-
-    Point c(segment->p2 - ray.end);
-    double aa = perpDot(a,c);
-    double bb = perpDot(b,c);
-
-    if(f < 0)
-    {
-        if(aa > 0 || aa < f) return false;
-        if(bb > 0 || bb < f) return false;
-    }
-    else
-    {
-        if(aa < 0 || aa > f) return false;
-        if(bb < 0 || bb > f) return false;
-    }
-
-    double out = 1.0 - (aa / f);
-    intersect = ((segment->p2 - segment->p1) * out) + segment->p1;
-    return true;
-}
+#include "tools.hpp"
 
 Pathfind::Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window)
     : _window(window)
@@ -100,10 +61,10 @@ std::vector<Point*> Pathfind::run()
         delete node;
     _waypoints.clear();
 
-    if(pathgrid[_goal.y - 1][_goal.x - 1])
+    if(blocked(_goal))
         return _waypoints;
 
-    PathNode* current = new PathNode(_start, nullptr, 0.f, distance(_start, _goal));
+    PathNode* current = new PathNode(_start, nullptr, 0.f, Tools::distance(_start, _goal));
     _openlist.push_back(current);
 
     while(!_openlist.empty())
@@ -147,8 +108,8 @@ std::vector<Point*> Pathfind::run()
             int yi = (i / 3) - 1;
 
             Point neighbour(x + xi, y + yi);
-            float G = distance(current->cell, neighbour);
-            float H = manhattenDistance(neighbour, _goal);
+            float G = Tools::distance(current->cell, neighbour);
+            float H = Tools::manhattenDistance(neighbour, _goal);
 
             if(inVector(_closedlist, neighbour) && G >= current->G) continue;
 
@@ -180,20 +141,6 @@ std::vector<Point*> Pathfind::run()
 bool Pathfind::sortNodes(PathNode* n0, PathNode* n1)
 {
     return (n0->F < n1->F);
-}
-
-float Pathfind::distance(Point p1, Point p2)
-{
-    float dx = p1.x - p2.x;
-    float dy = p1.y - p2.y;
-    return std::sqrt(dx * dx + dy * dy);
-}
-
-float Pathfind::manhattenDistance(Point p1, Point p2)
-{     
-	float x = (float)(std::fabs((float)(p1.x - p2.x)));
-	float y = (float)(std::fabs((float)(p1.y - p2.y)));
-	return x + y;
 }
 
 bool Pathfind::inVector(std::vector<PathNode*> list, Point cell)
@@ -255,4 +202,9 @@ bool Pathfind::blocked(Point cell)
         return true;
 
     return pathgrid[cell.y-1][cell.x-1];
+}
+
+Point Pathfind::c2p(Point cell)
+{
+    return Point((cell.x * _tilesX) - (_tilesX / 2), (cell.y * _tilesY) - (_tilesY / 2));
 }

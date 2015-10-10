@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _STRUCTS_HPP
+#define _STRUCTS_HPP
 
 #include <SFML/Graphics.hpp> 
 
@@ -46,3 +47,4 @@ struct Wall
     }
 };
 
+#endif
