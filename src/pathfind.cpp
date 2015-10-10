@@ -73,6 +73,9 @@ std::vector<Point*> Pathfind::run()
     if(blocked(_goal))
         return _waypoints;
 
+    if(_goal == _start)
+        return _waypoints;
+
     PathNode* current = new PathNode(_start, nullptr, 0.f, Tools::distance(_start, _goal));
     _openlist.push_back(current);
 
@@ -86,7 +89,6 @@ std::vector<Point*> Pathfind::run()
             while(current->parent != nullptr)
             {
                 _waypoints.push_back(new Point(current->cell.x, current->cell.y));
-                /* _waypoints.push_back(new Point((current->cell.x * _tileSizeX) - 8, (current->cell.y * _tileSizeY) - 8)); */
                 current = current->parent;
             }
 
@@ -249,10 +251,5 @@ bool Pathfind::blocked(Point cell)
 
 Point Pathfind::c2p(Point cell)
 {
-    return Point(cell.x * 16 - 8, cell.y * 16 - 8);
-}
-
-int Pathfind::ic2p(int p)
-{
-    return p * _tilesX - (_tilesX / 2);
+    return Point((cell.x * _tileSizeX) - (_tileSizeX / 2), (cell.y * _tileSizeY) - (_tileSizeX / 2));
 }
