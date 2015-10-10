@@ -45,10 +45,12 @@ private:
     Point _goal;
     sf::RenderWindow* _window;
     std::vector<std::vector<bool>> pathgrid;
+    std::vector<Point*> _finalpath;
     std::vector<Point*> _waypoints;
     std::vector<Wall*>* _walls;
     std::vector<PathNode*> _openlist;
     std::vector<PathNode*> _closedlist;
+    std::vector<Segment> _wallsegments;
     bool neighbours[9];
 
     bool inVector(std::vector<PathNode*> list, Point cell);
@@ -62,6 +64,7 @@ public:
     void setGoal(const int x, const int y);
     void buildPathGrid();
     Point c2p(Point cell);
+    int ic2p(int p);
 
     std::vector<Point*> run();
 };

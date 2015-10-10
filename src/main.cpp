@@ -80,9 +80,12 @@ int main()
         if(goalSet)
             window.draw(goal);
 
+        Point wp1(npc.getPosition().x, npc.getPosition().y);
+
         for(Point* point : waypoints)
         {
-            DrawTools::drawCircle(4, *point, sf::Color::Green, &window);
+            DrawTools::drawLine(wp1, *point, sf::Color::Green, &window);
+            wp1 = *point;
         }
 
         window.display();

@@ -3,16 +3,21 @@
 #include <iostream>
 #include <algorithm>
 #include <stdlib.h>
+#include "drawtools.hpp"
 #include "tools.hpp"
 
 Pathfind::Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window)
     : _window(window)
-    , _walls(walls)
+      , _walls(walls)
 {
     _tileSizeX = ml->GetTileSize().x;
     _tileSizeY = ml->GetTileSize().y;
     _tilesX = ml->GetMapSize().x / _tileSizeX;
     _tilesY = ml->GetMapSize().y / _tileSizeY;
+
+    for(Wall* wall : *_walls)
+        for(Segment* segment : wall->segments)
+            _wallsegments.push_back(*segment);
 
     buildPathGrid();
 }
@@ -61,6 +66,10 @@ std::vector<Point*> Pathfind::run()
         delete node;
     _waypoints.clear();
 
+    for(auto& node : _finalpath)
+        delete node;
+    _finalpath.clear();
+
     if(blocked(_goal))
         return _waypoints;
 
@@ -76,10 +85,11 @@ std::vector<Point*> Pathfind::run()
         {
             while(current->parent != nullptr)
             {
-                _waypoints.push_back(new Point((current->cell.x * _tileSizeX) - 8, (current->cell.y * _tileSizeY) - 8));
+                _waypoints.push_back(new Point(current->cell.x, current->cell.y));
+                /* _waypoints.push_back(new Point((current->cell.x * _tileSizeX) - 8, (current->cell.y * _tileSizeY) - 8)); */
                 current = current->parent;
             }
-            
+
             for(auto& node : _openlist)
                 delete node;
             _openlist.clear();
@@ -88,8 +98,42 @@ std::vector<Point*> Pathfind::run()
                 delete node;
             _closedlist.clear();
 
-            std::reverse(_waypoints.begin(), _waypoints.end());
-            return _waypoints;
+            Ray ray;
+            Point intersection;
+            bool found = false;
+
+            ray.start = Point(c2p(_start));            
+            Point done = c2p(_goal);
+
+            while(!found)
+            {
+                for(Point* wp : _waypoints)
+                {
+                    ray.end = Point(c2p(*wp));
+
+                    bool blocked = false;
+                    for(Segment segment : _wallsegments)
+                    {
+                        if(Tools::getIntersection(ray, &segment, intersection))
+                        {
+                            blocked = true;                
+                            break;
+                        }
+                    }
+
+                    if(!blocked)
+                    {
+                        _finalpath.push_back(new Point(ray.end.x, ray.end.y));
+                        ray.start = ray.end;
+                        if(ray.start == done)
+                            found = true;
+                        break;
+                    }
+
+                }
+            }
+
+            return _finalpath;
         }
 
         _openlist.erase(_openlist.begin());
@@ -126,12 +170,11 @@ std::vector<Point*> Pathfind::run()
                     {
                         node->G = G;
                         node->H = H;
-                        /* node->recalcF(); */
                         node->parent = current;
                     }
                 }
             }
-			
+
         }
     }
 
@@ -206,5 +249,10 @@ bool Pathfind::blocked(Point cell)
 
 Point Pathfind::c2p(Point cell)
 {
-    return Point((cell.x * _tilesX) - (_tilesX / 2), (cell.y * _tilesY) - (_tilesY / 2));
+    return Point(cell.x * 16 - 8, cell.y * 16 - 8);
+}
+
+int Pathfind::ic2p(int p)
+{
+    return p * _tilesX - (_tilesX / 2);
 }
