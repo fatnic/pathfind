@@ -3,8 +3,8 @@
 #include <iostream>
 #include "structs.hpp"
 #include "pathfind.hpp"
-#include "drawtools.hpp"
-#include "tmxtools.hpp"
+#include "tools/drawtools.hpp"
+#include "tools/tmxtools.hpp"
 #include "tmx/MapLoader.h"
 
 int main()

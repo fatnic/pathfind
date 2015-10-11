@@ -3,8 +3,8 @@
 #include <iostream>
 #include <algorithm>
 #include <stdlib.h>
-#include "drawtools.hpp"
-#include "tools.hpp"
+#include "tools/drawtools.hpp"
+#include "tools/tools.hpp"
 
 Pathfind::Pathfind(tmx::MapLoader* ml, std::vector<Wall*>* walls, sf::RenderWindow* window)
     : _window(window)
