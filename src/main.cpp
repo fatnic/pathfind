@@ -47,7 +47,13 @@ int main()
 
         window.clear();
         window.draw(ml);
-        pathfind.buildPathGrid();
+
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+        {
+            int x = sf::Mouse::getPosition(window).x;
+            int y = sf::Mouse::getPosition(window).y;
+            npc.setPosition(x, y);
+        }
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {

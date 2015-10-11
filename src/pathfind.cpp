@@ -70,7 +70,7 @@ std::vector<Point*> Pathfind::run()
         delete node;
     _finalpath.clear();
 
-    if(blocked(_goal))
+    if(blocked(_goal) || blocked(_start))
         return _waypoints;
 
     if(_goal == _start)
